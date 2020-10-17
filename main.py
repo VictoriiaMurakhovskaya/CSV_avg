@@ -6,6 +6,7 @@ import configparser
 import os
 from counter import calculate
 from datetime import time
+from grapher import graph_report
 
 
 def choosefile(flag):
@@ -63,15 +64,16 @@ def convert_time(excel_time):
 
 
 def run_script():
-    global column
+    global column, window
     wb = xlrd.open_workbook(files[0].get())
     ws = wb.sheet_by_index(0)
     data = [convert_time(ws.cell(i, column.current() + 1).value) for i in range(1, ws.nrows)]
-    calculate(data, files[1].get(), files[2].get())
+    df = calculate(data, files[1].get(), files[2].get())
+    graph_report(window, df)
 
 
 def ui():
-    global files, column
+    global files, column, window
     window = Tk()
     window.geometry("330x175")
     window.title('CSV parser')

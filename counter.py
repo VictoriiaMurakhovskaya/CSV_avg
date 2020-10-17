@@ -1,8 +1,7 @@
 import pandas as pd
-import csv
 from datetime import time
-from datetime import timedelta
 import xlsxwriter
+
 
 def convert_time(string_time):
     values = string_time.split(':')
@@ -18,7 +17,6 @@ def change_time(cur_time, delta):
     return time(sec // 3600, (sec % 3600) // 60, sec % 60)
 
 
-
 def calculate(intervals, csvfile, outputfile):
     df = pd.read_csv(csvfile)
     for index, row in df.iterrows():
@@ -31,4 +29,5 @@ def calculate(intervals, csvfile, outputfile):
         to_drop = [item for item in y if item not in ['neutral', 'happy', 'sad', 'surprise', 'angry', 'fear', 'disgust']]
         y = y.drop(columns=to_drop)
         res.update({(intervals[i], change_time(intervals[i+1], -1)): y.mean(axis=0)})
-    pd.DataFrame(res).to_excel(outputfile)
+    # pd.DataFrame(res).to_excel(outputfile)
+    return pd.DataFrame(res)
